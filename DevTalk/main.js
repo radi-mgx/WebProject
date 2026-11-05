@@ -1,4 +1,4 @@
-/* ---------- Lien actif de la navbar ---------- */
+/* ---------- Active link in the navbar ---------- */
 const links = document.querySelectorAll(".navbar__links a");
 
 links.forEach((link) => {
@@ -9,7 +9,25 @@ links.forEach((link) => {
 });
 
 
-/* ---------- Register Now : le bouton devient un champ email ---------- */
+/* ---------- Hamburger menu (mobile) ---------- */
+const navbar = document.querySelector(".navbar");
+const toggle = document.querySelector(".navbar__toggle");
+
+toggle.addEventListener("click", () => {
+  const open = navbar.classList.toggle("menu-open");
+  toggle.setAttribute("aria-expanded", open);
+});
+
+// close the menu when a link is clicked
+links.forEach((link) => {
+  link.addEventListener("click", () => {
+    navbar.classList.remove("menu-open");
+    toggle.setAttribute("aria-expanded", "false");
+  });
+});
+
+
+/* ---------- Register Now: button becomes an email field ---------- */
 document.querySelectorAll(".reg").forEach((reg) => {
   const btn = reg.querySelector(".reg__btn");
   const form = reg.querySelector(".reg__form");
@@ -23,25 +41,25 @@ document.querySelectorAll(".reg").forEach((reg) => {
     msg.className = "reg__msg";
   }
 
-  // clic sur le bouton -> afficher le champ
+  // click on the button -> show the field
   btn.addEventListener("click", () => {
     reg.classList.add("open");
     input.focus();
   });
 
-  // touche Echap -> revenir au bouton
+  // Escape key -> back to the button
   input.addEventListener("keydown", (e) => {
     if (e.key === "Escape") close();
   });
 
-  // clic en dehors -> revenir au bouton (si le champ est vide)
+  // click outside -> back to the button (if the field is empty)
   document.addEventListener("click", (e) => {
     if (reg.classList.contains("open") && !reg.contains(e.target) && !input.value.trim()) {
       close();
     }
   });
 
-  // envoi
+  // submit
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = input.value.trim();
@@ -53,7 +71,7 @@ document.querySelectorAll(".reg").forEach((reg) => {
       return;
     }
 
-    // sauvegarde locale (temporaire)
+    // local save (temporary)
     const saved = JSON.parse(localStorage.getItem("devtalk_emails") || "[]");
     if (!saved.includes(email)) saved.push(email);
     localStorage.setItem("devtalk_emails", JSON.stringify(saved));
